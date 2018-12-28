@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TextInput } from 'react-native'
+import { Text, Image, View, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native'
 import Services from '../Services'
 import Constance from '../Resources/Constance'
 
 const { LOGIN_ERROR } = Constance.message
-
+const ProceedButton = require('../Resources/img/ProceedButton.png')
 const { _login } = Services
+const { BACKGROUND_COLOUR, DEFAULT_TEXT_BOX_COLOUR } = Constance.ui
 
 export class Login extends Component {
 
@@ -24,17 +25,20 @@ export class Login extends Component {
             this.setState({
                 password: ''
             })
-        }else{
+        } else {
             console.log(this.props)
             //save it into async storage
             await this.props.screenProps.storeUserInfo(result)
 
             console.log(await this.props.screenProps.userInfo())
             //navigate to the main swipper pages
-            this.props.navigation.navigate("MainSwiper")
+            this.props.navigation.navigate({
+                routeName: "MainSwiper", params: {
+                    ahahha: 'true'
+                }
+            })
 
         }
-        
     }
 
     onChangeText = (key, value) => {
@@ -46,7 +50,7 @@ export class Login extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}> Login Pages </Text>
+                {/* <Text style={styles.title}> Login Pages </Text> */}
                 <TextInput
                     name="phoneNumber"
                     placeholder="Enter your phone number"
@@ -69,8 +73,10 @@ export class Login extends Component {
                     onChangeText={val => { this.onChangeText('password', val) }}
                     style={styles.input}
                 />
-
-                <Text onPress={this.login}>Login</Text>
+                <TouchableWithoutFeedback onPress={this.login}>
+                    <Image style={styles.logo} source={ProceedButton} ></Image>
+                </TouchableWithoutFeedback>
+                {/* <Text onPress={this.login}>Login</Text> */}
             </View>
         )
     }
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#DBF3EC',
+        backgroundColor: BACKGROUND_COLOUR,
     },
     title: {
         fontSize: 35,
@@ -93,8 +99,14 @@ const styles = StyleSheet.create({
     input: {
         fontSize: 25,
         paddingHorizontal: 5,
-        backgroundColor: '#E9FAF5',
-        marginBottom: 10
+        backgroundColor: DEFAULT_TEXT_BOX_COLOUR,
+        marginBottom: 10,
+        width: '80%'
+    },
+    logo: {
+        width: 175,
+        height: 150,
+        marginBottom: 10,
     }
 })
 

@@ -9,6 +9,7 @@ import Camera from './Camera'
 export class MainSwiper extends Component {
     
     async componentDidMount() {
+        console.log(this.props)
         var userInfo = await this.props.screenProps.userInfo()
     }
     

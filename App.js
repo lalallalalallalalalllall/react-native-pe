@@ -14,10 +14,13 @@ import { PermissionsAndroid, View, StatusBar, Text, AsyncStorage } from "react-n
 //used config data
 import Constance from './src/Resources/Constance'
 import Services from './src/Services'
+const { _update_video_status } = Services
+
+
 const { DEFAULT_NO_NOTIFICATION_COLOUR, FRIEND_REQUEST_NOTIFICATION_COLOUR, FAVOURITE_UPDATE_NOTIFICATION_COLOUR } = Constance.ui
 const { USER_INFORMATION_ASYNC_STORAGE_KEY } = Constance.app
 const { STATUS_LOGIN, STATUS_NOT_LOGIN } = Constance.status
-const { _update_video_status } = Services
+
 
 //register all the pages 
 import Camera from './src/Pages/Camera'
@@ -28,6 +31,7 @@ import NewSplash from './src/Pages/NewSplash'
 import MainSplash from './src/Pages/MainSplash'
 import MainSwiper from './src/Pages/MainSwiper'
 import Loading from './src/Pages/Loading'
+import Verification from './src/Pages/Verification'
 // must be matching somethings inside AppNavigator
 const initial = 'Loading'
 const AppNavigator = createStackNavigator({
@@ -38,7 +42,8 @@ const AppNavigator = createStackNavigator({
   NewSplash: NewSplash,
   MainSplash: MainSplash,
   Camera: Camera,
-  MainSwiper: MainSwiper
+  MainSwiper: MainSwiper,
+  Verification : Verification
 }, {
     initialRouteName: initial,
     navigationOptions: {
@@ -47,6 +52,24 @@ const AppNavigator = createStackNavigator({
   }
 )
 
+ const prevGetStateForAction = AppNavigator.router.getStateForAction;
+
+ AppNavigator.router.getStateForAction = (action, state) => {
+  // Do not allow to go back from Home
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'MainSwiper') {
+    return null;
+  }
+
+  // // Do not allow to go back to Login
+  // if (action.type === 'Navigation/BACK' && state) {
+  //   const newRoutes = state.routes.filter(r => r.routeName !== 'Login');
+  //   const newIndex = newRoutes.length - 1;
+  //   return prevGetStateForAction(action, { index: newIndex, routes: newRoutes });
+  // }
+  return prevGetStateForAction(action, state);
+};
+
+console.log(prevGetStateForAction)
 //storage key
 const key = USER_INFORMATION_ASYNC_STORAGE_KEY;
 

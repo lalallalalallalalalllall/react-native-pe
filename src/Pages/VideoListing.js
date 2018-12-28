@@ -7,13 +7,13 @@ export class VideoListing extends Component {
     // itemList: 
   }
   async componentDidMount() {
-    setInterval(()=>{
-      // let userInfo = await this.props.screenProps.userInfo()
-      // console.log(userInfo)
+    setInterval(async()=>{
+      let userInfo = await this.props.screenProps.userInfo()
+      console.log(userInfo)
   
-      // this.setState({
-      //   item: userInfo.item
-      // })
+      this.setState({
+        item: userInfo.item
+      })
     },5000)
   }
   render() {
