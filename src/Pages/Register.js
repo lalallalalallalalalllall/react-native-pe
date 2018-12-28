@@ -25,17 +25,17 @@ export class Register extends Component {
     console.log('name', this.state.name)
     console.log('phoneNumber', this.state.phoneNumber)
     console.log(this.props)
-    this.props.navigation.navigate({routeName : 'Verification', params: { registrationKey : '1234'}})
+    this.props.navigation.navigate({ routeName: 'Verification', params: { registrationKey: '1234' } })
   }
-  // registerAccount = () => {
+  registerAccount = () => {
 
-  //   //do some validation here ?
-  //   this.props.navigation.navigate({
-  //     routeName: "Varification", params: {
-  //         ahahha: 'true'
-  //     }
-  // })
-  // }
+    //do some validation here ?
+    this.props.navigation.navigate({
+      routeName: "Varification", params: {
+        ahahha: 'true'
+      }
+    })
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -65,7 +65,7 @@ export class Register extends Component {
 
         <DatePicker
           ref={(picker) => { this.datePicker = picker; }}
-          style={styles.input}
+          style={styles.DatePickerBody}
           date={this.state.date}
           customStyles={{
             dateInput: styles.dateInput,
@@ -122,6 +122,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2DA681',
     marginBottom: 10
+  },
+  DatePickerBody: {
+
+    paddingHorizontal: 5,
+    backgroundColor: DEFAULT_TEXT_BOX_COLOUR,
+    marginBottom: 10,
+    width: '80%',
+    height: 50
   },
   input: {
     fontSize: 25,

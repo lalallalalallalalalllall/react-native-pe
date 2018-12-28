@@ -4,7 +4,7 @@ import Video from 'react-native-video';
 
 
 export class VideoPlayback extends Component {
-//https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb 
+    //https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb 
     hexToRgb = (hex) => {
         var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -13,8 +13,12 @@ export class VideoPlayback extends Component {
             b: parseInt(result[3], 16)
         } : null;
     }
+    close = () => {
+        this.props.navigation.goBack()
+    }
     render() {
         const uri = this.props.navigation.state.params.uri
+        const colorName = this.props.navigation.state.params.colorName
         console.log(this.props.navigation.state.params)
         const colorCode = this.hexToRgb(this.props.navigation.state.params.colorCode) || { r: 0, g: 0, b: 0 }
         const frameStyle = StyleSheet.create({
@@ -40,24 +44,27 @@ export class VideoPlayback extends Component {
         console.log(colorCode)
         return (
             <View style={styles.container}>
-                <Video
-                    source={{ uri: uri }}
-                    style={styles.video}
-                    muted={false}
-                    repeat={true}
-                    resizeMode={"cover"}
-                    volume={5.0}
-                    rate={1.0}
-                    ignoreSilentSwitch={"obey"}
-                />
-                <View style={styles.content}>
-                    <View style={frameStyle.topFrame} >
-                        {/* <Text style={styles.text}>Hello</Text> */}
+                <TouchableWithoutFeedback onPress={}>
+                    <Video
+                        source={{ uri: uri }}
+                        style={styles.video}
+                        muted={false}
+                        repeat={true}
+                        resizeMode={"cover"}
+                        volume={5.0}
+                        rate={1.0}
+                        ignoreSilentSwitch={"obey"}
+                    />
+                    <View style={styles.content}>
+                        {/* <View style={frameStyle.topFrame} >
+                        <Text style={styles.text}>Hello</Text>
+                    </View> */}
+                        <View style={frameStyle.bottomFrame} >
+                            <Text style={styles.text}>{colorName}</Text>
+                            <Text style={{ textAlign: 'right' }}>( some duration from upload date 01-01-0001)</Text>
+                        </View>
                     </View>
-                    <View style={frameStyle.bottomFrame} >
-                        {/* <Text style={styles.text}>Hello</Text> */}
-                    </View>
-                </View>
+                </TouchableWithoutFeedback>
             </View>
         )
     }
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
     },
     text: {
-        fontSize: 50,
+        fontSize: 30,
         textAlign: 'center',
         margin: 10,
     },

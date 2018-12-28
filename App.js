@@ -32,31 +32,35 @@ import MainSplash from './src/Pages/MainSplash'
 import MainSwiper from './src/Pages/MainSwiper'
 import Loading from './src/Pages/Loading'
 import Verification from './src/Pages/Verification'
+import VideoEdit from './src/Pages/VideoEdit'
+import SendToFriends from './src/Pages/SendToFriends'
 // must be matching somethings inside AppNavigator
 const initial = 'Loading'
 const AppNavigator = createStackNavigator({
-  Loading : Loading ,
+  Loading: Loading,
   Login: Login,
   Register: Register,
   Video: Video,
+  VideoEdit: VideoEdit,
   NewSplash: NewSplash,
   MainSplash: MainSplash,
   Camera: Camera,
   MainSwiper: MainSwiper,
-  Verification : Verification
+  Verification: Verification,
+  SendToFriends: SendToFriends
 }, {
     initialRouteName: initial,
     navigationOptions: {
-     header: null
+      header: null
     }
   }
 )
 
- const prevGetStateForAction = AppNavigator.router.getStateForAction;
+const prevGetStateForAction = AppNavigator.router.getStateForAction;
 
- AppNavigator.router.getStateForAction = (action, state) => {
+AppNavigator.router.getStateForAction = (action, state) => {
   // Do not allow to go back from Home
-  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'MainSwiper') {
+  if (action.type === 'BACK' && state && state.routes[state.index].routeName === 'MainSwiper') {
     return null;
   }
 
@@ -76,16 +80,16 @@ const key = USER_INFORMATION_ASYNC_STORAGE_KEY;
 export default class App extends Component {
 
   state = {
-    status : STATUS_NOT_LOGIN,
+    status: STATUS_NOT_LOGIN,
     userInformation: {},
     statusBar: DEFAULT_NO_NOTIFICATION_COLOUR
   }
   async componentDidMount() {
-    this.removeUserInformation()
+    // this.removeUserInformation()
     try {
       //this is an existing user
       // await AsyncStorage.setItem(key, JSON.stringify(sampleInfo))
-      
+
       const userInformation = await AsyncStorage.getItem(key)
       this.setState({
         userInformation: JSON.parse(userInformation)
@@ -106,22 +110,22 @@ export default class App extends Component {
       this.setState({
         status: STATUS_LOGIN
       })
-      
+
     } catch (e) {
-      
+
       //this user is a new user
     }
   }
 
-  updateVideoStatus = async ( videoId ) => {
-    let tempUserInfo =  this.state.userInformation
+  updateVideoStatus = async (videoId) => {
+    let tempUserInfo = this.state.userInformation
     console.log(tempUserInfo)
     // tempUserInfo.items.forEach(i => {
     //   if(i.id==videoId ){
     //     i.seen = true
     //   }
     // })
-    
+
     // this.setState({
     //   userInformation : tempUserInfo
     // })
@@ -129,7 +133,7 @@ export default class App extends Component {
     // await _update_video_status( tempUserInfo.userId , videoId)
 
   }
-  storeUserInformation = async ( userInfo ) => {
+  storeUserInformation = async (userInfo) => {
     await AsyncStorage.setItem(key, JSON.stringify(userInfo))
     this.setState({
       userInformation: userInfo
@@ -145,7 +149,7 @@ export default class App extends Component {
       await AsyncStorage.removeItem(key);
       console.log('removed data')
     }
-    catch(e) {
+    catch (e) {
       console.log("no data to remove")
     }
 
@@ -159,11 +163,11 @@ export default class App extends Component {
         />
         <AppNavigator
           screenProps={{
-            storeUserInfo : this.storeUserInformation,
-            removeUserInfo  : this.removeUserInformation,
-            updateVideoStatus : this.updateVideoStatus,
+            storeUserInfo: this.storeUserInformation,
+            removeUserInfo: this.removeUserInformation,
+            updateVideoStatus: this.updateVideoStatus,
             userInfo: this.getUserInformation,
-            status : this.state.status
+            status: this.state.status
           }}
         />
       </>

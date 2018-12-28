@@ -17,6 +17,7 @@ module.exports = (phoneNumber, password) => {
           username: 'friend 1',
           url: 'https://s3-ap-southeast-1.amazonaws.com/pegeon-vide-test-cdn/video/sample.mp4',
           createdAt: '2018-10-20',
+          colorName : 'Black',
           seen : false
         },
         {
@@ -26,6 +27,7 @@ module.exports = (phoneNumber, password) => {
           username: 'friend 2',
           url: 'https://s3-ap-southeast-1.amazonaws.com/pegeon-vide-test-cdn/video/sample.mp4',
           createdAt: '2018-10-20',
+          colorName : 'oren',
           seen : true
         },
       ],

@@ -22,10 +22,11 @@ const styles = StyleSheet.create({
 })
 
 
+
 export class MainSplash extends Component {
     logout = async () => {
-        this.props.screenProps.removeUserInfo()
-        this.props.navigation.navigate("Loading")
+        // this.props.screenProps.removeUserInfo()
+        this.props.navigation.navigate("MainSwiper")
     }
     render() {
         return (
