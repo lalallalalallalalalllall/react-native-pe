@@ -9,118 +9,124 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation';
 import { PermissionsAndroid, View, StatusBar, Text, AsyncStorage } from "react-native"
+
+
+//used config data
+import Constance from './src/Resources/Constance'
+import Services from './src/Services'
+const { DEFAULT_NO_NOTIFICATION_COLOUR, FRIEND_REQUEST_NOTIFICATION_COLOUR, FAVOURITE_UPDATE_NOTIFICATION_COLOUR } = Constance.ui
+const { USER_INFORMATION_ASYNC_STORAGE_KEY } = Constance.app
+const { STATUS_LOGIN, STATUS_NOT_LOGIN } = Constance.status
+const { _update_video_status } = Services
+
+//register all the pages 
 import Camera from './src/Pages/Camera'
 import Video from './src/Pages/Video'
-
 import Login from './src/Pages/Login'
 import Register from './src/Pages/Register'
-import Splash1 from './src/Pages/Splash1'
-import Splash2 from './src/Pages/Splash2'
+import NewSplash from './src/Pages/NewSplash'
+import MainSplash from './src/Pages/MainSplash'
 import MainSwiper from './src/Pages/MainSwiper'
-
-
-
-var initial = 'Splash1'
+import Loading from './src/Pages/Loading'
+// must be matching somethings inside AppNavigator
+const initial = 'Loading'
 const AppNavigator = createStackNavigator({
+  Loading : Loading ,
   Login: Login,
   Register: Register,
   Video: Video,
-  Splash1: Splash1,
-  Splash2: Splash2,
+  NewSplash: NewSplash,
+  MainSplash: MainSplash,
   Camera: Camera,
   MainSwiper: MainSwiper
 }, {
     initialRouteName: initial,
     navigationOptions: {
-      header: null
+     header: null
     }
   }
 )
 
-const key = 'pegeon-user';
+//storage key
+const key = USER_INFORMATION_ASYNC_STORAGE_KEY;
 
 export default class App extends Component {
 
   state = {
+    status : STATUS_NOT_LOGIN,
     userInformation: {},
-    statusBar: '#000'
+    statusBar: DEFAULT_NO_NOTIFICATION_COLOUR
   }
   async componentDidMount() {
+    this.removeUserInformation()
     try {
-      const sampleInfo = {
-        userId: '012345',
-        username: 'food',
-        item: [
-          {
-            id : '1',
-            userId: '1',
-            color: '#999999',
-            username: 'friend 1',
-            url: 'https://s3-ap-southeast-1.amazonaws.com/pegeon-vide-test-cdn/video/sample.mp4',
-            createdAt: '2018-10-20'
-          },
-          {
-            id : '2',
-            userId: '2',
-            color: '#110011',
-            username: 'friend 2',
-            url: 'https://s3-ap-southeast-1.amazonaws.com/pegeon-vide-test-cdn/video/sample.mp4',
-            createdAt: '2018-10-20'
-          },
-        ],
-        friendList: [
-          {
-            userId: '1',
-            username: 'friend 1',
-            color: '#9C8327',
-            fav: false
-          },
-          {
-            userId: '2',
-            username: 'friend 2',
-            color: '#465399',
-            fav: true
-          }
-        ],
-        notification: {
-          friendsRequest: [
-            {
-              id: '3',
-              username: 'new friends 3',
-              fav: false
-            }
-          ],
-          favUpdate: []
-        }
-      }
-      await AsyncStorage.setItem(key, JSON.stringify(sampleInfo))
-      console.log("smoethings")
+      //this is an existing user
+      // await AsyncStorage.setItem(key, JSON.stringify(sampleInfo))
+      
       const userInformation = await AsyncStorage.getItem(key)
       this.setState({
         userInformation: JSON.parse(userInformation)
       })
-
-
-      if(this.state.userInformation.notification.friendsRequest.length){
+      if (this.state.userInformation.notification.friendsRequest.length) {
         this.setState({
-          statusBar : "blue"
+          statusBar: FRIEND_REQUEST_NOTIFICATION_COLOUR
         })
-      }else if (this.state.userInformation.notification.favUpdate.length){
+      } else if (this.state.userInformation.notification.favUpdate.length) {
         this.setState({
-          statusBar : "red"
+          statusBar: FAVOURITE_UPDATE_NOTIFICATION_COLOUR
+        })
+      } else {
+        this.setState({
+          statusBar: DEFAULT_NO_NOTIFICATION_COLOUR
         })
       }
+      this.setState({
+        status: STATUS_LOGIN
+      })
+      
     } catch (e) {
-      console.log(e)
+      
+      //this user is a new user
     }
   }
 
-  getUserInformation = async () => {
-    const userInformation = await AsyncStorage.getItem(key)
-    return JSON.parse(userInformation)
+  updateVideoStatus = async ( videoId ) => {
+    let tempUserInfo =  this.state.userInformation
+    console.log(tempUserInfo)
+    // tempUserInfo.items.forEach(i => {
+    //   if(i.id==videoId ){
+    //     i.seen = true
+    //   }
+    // })
+    
+    // this.setState({
+    //   userInformation : tempUserInfo
+    // })
+
+    // await _update_video_status( tempUserInfo.userId , videoId)
+
+  }
+  storeUserInformation = async ( userInfo ) => {
+    await AsyncStorage.setItem(key, JSON.stringify(userInfo))
+    this.setState({
+      userInformation: userInfo
+    })
   }
 
+  getUserInformation = async () => {
+    return this.state.userInformation
+  }
 
+  removeUserInformation = async () => {
+    try {
+      await AsyncStorage.removeItem(key);
+      console.log('removed data')
+    }
+    catch(e) {
+      console.log("no data to remove")
+    }
+
+  }
   render() {
     return (
       <>
@@ -130,9 +136,12 @@ export default class App extends Component {
         />
         <AppNavigator
           screenProps={{
-            userInfo: this.getUserInformation
+            storeUserInfo : this.storeUserInformation,
+            removeUserInfo  : this.removeUserInformation,
+            updateVideoStatus : this.updateVideoStatus,
+            userInfo: this.getUserInformation,
+            status : this.state.status
           }}
-
         />
       </>
     );

@@ -2,24 +2,31 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import Item from '../Components/Item'
 export class VideoListing extends Component {
-  state = {
-    item : []
+  state = { 
+    item: [],
+    // itemList: 
   }
   async componentDidMount() {
-    var userInfo = await this.props.screenProps.userInfo()
-    console.log(userInfo)
+    setInterval(()=>{
+      // let userInfo = await this.props.screenProps.userInfo()
+      // console.log(userInfo)
   
-    this.setState({
-      item: userInfo.item
-    })
-
-    console.log(this.state.item)
-}
+      // this.setState({
+      //   item: userInfo.item
+      // })
+    },5000)
+  }
   render() {
+    console.log('this.state.item ned1')
+    console.log(this.state.item)
     var itemList = []
-    this.state.item.map(item => itemList.push(
-      <Item link={item.url} name={item.username} key={item.id} color={item.color} runFunction={this.props.functions.playVideo}/>
-    ))
+    var count = 0;
+    this.state.item.forEach(item => {
+      count=count+=1
+      itemList.push(
+        < Item link={item.url} name={item.username} index={count} id={item.id} key={item.id} color={item.color} seen={item.seen || false} runFunction={this.props.functions.playVideo} />
+      )
+    })
 
     return (
       <View style={styles.container}>
@@ -35,8 +42,7 @@ export class VideoListing extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    padding: 20,
     backgroundColor: '#fff',
   }
 })

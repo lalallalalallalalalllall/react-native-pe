@@ -1,7 +1,13 @@
 module.exports = {
 
-    api : require('./api1'),
+    api : require('./api'),
 
-    ui : require('./ui')
+    ui : require('./ui'),
+    
+    app : require('./app'),
+
+    status : require('./status'),
+
+    message : require('./message')
 
 }

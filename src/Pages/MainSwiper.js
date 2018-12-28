@@ -5,16 +5,16 @@ import VideoListing from './VideoListing'
 import Camera from './Camera'
 
 
-export class MainSwiper extends Component {
-    async componentDidMount() {
 
+export class MainSwiper extends Component {
+    
+    async componentDidMount() {
         var userInfo = await this.props.screenProps.userInfo()
-        console.log(userInfo)
     }
     
-    playVideo = async (uri, colorCode) => {
+    playVideo = async (uri, colorCode, id) => {
         this.props.navigation.push("Video", { uri: uri, colorCode: colorCode })
-        console.log(this)
+        this.props.screenProps.updateVideoStatus(id)
     }
 
     modifyVideo = async ( uri ) => {
@@ -26,12 +26,13 @@ export class MainSwiper extends Component {
             <Swiper style={styles.wrapper} loop={false} showsPagination={false} index={1}>
                 <Camera functions = {{modifyVideo : this.modifyVideo }}/>
                 <Swiper style={styles.wrapper} loop={false} horizontal={false} showsPagination={false} index={1}>
-                    <View>
-                        <Text>Food</Text>
-                    </View>
+                    
                     <VideoListing screenProps={this.props.screenProps} functions={{
                         playVideo: this.playVideo
                     }} />
+                    <View>
+                        <Text>Food</Text>
+                    </View>
                     <View>
                         <Text>FOOD</Text>
                     </View>

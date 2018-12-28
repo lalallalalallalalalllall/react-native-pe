@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Image, StyleSheet } from 'react-native'
+import { Text, View, Image, StyleSheet , TouchableWithoutFeedback} from 'react-native'
 
 const styles = StyleSheet.create({
     container: {
@@ -20,15 +20,23 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     }
 })
-export class Splash2 extends Component {
+
+
+export class MainSplash extends Component {
+    logout = async () => {
+        this.props.screenProps.removeUserInfo()
+        this.props.navigation.navigate("Loading")
+    }
     render() {
         return (
-            <View style={styles.container}>
+            <TouchableWithoutFeedback delayLongPress={1000} onLongPress={this.logout} onPress={this.logout} disabled={false}>
+            <View style={styles.container} >
                 <Image style={styles.logo} source={require('../Resources/img/MainLogo.png')}></Image>
-                <Text style={styles.title}> Splash Screen2  </Text>
+                <Text style={styles.title}>SOME_COLOURFUL_SCREEN</Text>
             </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
 
-export default Splash2
+export default MainSplash

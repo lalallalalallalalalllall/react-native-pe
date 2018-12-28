@@ -1,15 +1,40 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, TextInput } from 'react-native'
+import Services from '../Services'
+import Constance from '../Resources/Constance'
+
+const { LOGIN_ERROR } = Constance.message
+
+const { _login } = Services
 
 export class Login extends Component {
 
     state = {
         phoneNumber: '',
-        password: ''
+        password: '',
+        message: ''
     }
+
     login = async () => {
-        console.log(this.state)
-        this.props.navigation.navigate("MainSwiper")
+        var result = await _login(this.state.phoneNumber, this.state.password)
+        if (result == null) {
+            this.setState({
+                message: LOGIN_ERROR
+            })
+            this.setState({
+                password: ''
+            })
+        }else{
+            console.log(this.props)
+            //save it into async storage
+            await this.props.screenProps.storeUserInfo(result)
+
+            console.log(await this.props.screenProps.userInfo())
+            //navigate to the main swipper pages
+            this.props.navigation.navigate("MainSwiper")
+
+        }
+        
     }
 
     onChangeText = (key, value) => {
@@ -17,6 +42,7 @@ export class Login extends Component {
             [key]: value
         })
     }
+
     render() {
         return (
             <View style={styles.container}>
@@ -28,6 +54,7 @@ export class Login extends Component {
                     keyboardType="phone-pad"
                     returnKeyType="next"
                     style={styles.input}
+                    value={this.state.phoneNumber}
                     onChangeText={val => { this.onChangeText('phoneNumber', val) }}
                     onSubmitEditing={() => { this.passswordInput.focus() }}
                 />
@@ -37,6 +64,7 @@ export class Login extends Component {
                     placeholderTextColor='rgba(0,0,0,0.1)'
                     placeholder="Enter your password"
                     secureTextEntry
+                    value={this.state.password}
                     returnKeyType="go"
                     onChangeText={val => { this.onChangeText('password', val) }}
                     style={styles.input}
