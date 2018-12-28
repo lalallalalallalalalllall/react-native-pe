@@ -5,7 +5,7 @@ const  {BUTTON_COLOR_NEW_VIDEO , BUTTON_COLOR_SEEN_VIDEO} = Constance.ui
 export class Item extends Component {
 
     onPress = () => {
-        this.props.runFunction(this.props.link, this.props.color , this.props.colorName , this.props.id)
+        this.props.runFunction(this.props.link, this.props.color , this.props.colorName ,this.props.createdAt ,  this.props.id)
     }
     render() {
         console.log('item', this.props)

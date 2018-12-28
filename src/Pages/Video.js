@@ -14,11 +14,13 @@ export class VideoPlayback extends Component {
         } : null;
     }
     close = () => {
+        //close the video lol
         this.props.navigation.goBack()
     }
     render() {
         const uri = this.props.navigation.state.params.uri
         const colorName = this.props.navigation.state.params.colorName
+        const createdAt = this.props.navigation.state.params.createdAt
         console.log(this.props.navigation.state.params)
         const colorCode = this.hexToRgb(this.props.navigation.state.params.colorCode) || { r: 0, g: 0, b: 0 }
         const frameStyle = StyleSheet.create({
@@ -43,8 +45,9 @@ export class VideoPlayback extends Component {
 
         console.log(colorCode)
         return (
-            <View style={styles.container}>
-                <TouchableWithoutFeedback onPress={}>
+            <TouchableWithoutFeedback onPress={this.close}>
+                <View style={styles.container}>
+
                     <Video
                         source={{ uri: uri }}
                         style={styles.video}
@@ -61,11 +64,12 @@ export class VideoPlayback extends Component {
                     </View> */}
                         <View style={frameStyle.bottomFrame} >
                             <Text style={styles.text}>{colorName}</Text>
-                            <Text style={{ textAlign: 'right' }}>( some duration from upload date 01-01-0001)</Text>
+                            <Text style={{ textAlign: 'right' }}>{createdAt}</Text>
                         </View>
                     </View>
-                </TouchableWithoutFeedback>
-            </View>
+
+                </View>
+            </TouchableWithoutFeedback>
         )
     }
 }

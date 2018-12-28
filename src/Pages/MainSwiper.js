@@ -13,8 +13,8 @@ export class MainSwiper extends Component {
         var userInfo = await this.props.screenProps.userInfo()
     }
     
-    playVideo = async (uri, colorCode, colorName, id) => {
-        this.props.navigation.push("Video", { uri: uri, colorCode: colorCode ,colorName : colorName })
+    playVideo = async (uri, colorCode, colorName, createdAt, id) => {
+        this.props.navigation.push("Video", { uri: uri, colorCode: colorCode ,colorName : colorName , createdAt : createdAt})
         this.props.screenProps.updateVideoStatus(id)
     }
 

@@ -52,7 +52,7 @@ export class VideoListing extends Component {
     console.log('before',this.state.item)
     this.state.item.slice().reverse().forEach((item, index) => {
       itemList.push(
-        < Item link={item.url} name={item.username} index={index+1} id={item.id} key={item.id} color={item.color} colorName={item.colorName} seen={item.seen || false} runFunction={this.props.functions.playVideo} />
+        < Item link={item.url} name={item.username} createdAt={item.createdAt} index={index+1} id={item.id} key={item.id} color={item.color} colorName={item.colorName} seen={item.seen || false} runFunction={this.props.functions.playVideo} />
       )
     })
     console.log('after',this.state.item)
