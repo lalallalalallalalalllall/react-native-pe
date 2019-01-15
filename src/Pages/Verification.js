@@ -21,11 +21,12 @@ export class Verification extends Component {
         //redirect to main swiper
         this.props.navigation.navigate({
             routeName: 'MainSwiper', params: {
-                userkey: 'asdasd'
+                secret: 'asdasd'
             }
         })
     }
     render() {
+        console.log(this.state.verificationCode )
         return (
             <View style={styles.container}>
                 <CodePin
@@ -38,6 +39,7 @@ export class Verification extends Component {
                     autoFocusFirst={false} // disabling auto-focus
                 />
                 <Text onPress={() => { this.resentVerification(this.props.navigation.state.params.registrationKey) }}>Resend</Text>
+                <Text >{this.state.verificationCode}</Text>
             </View>
         )
     }

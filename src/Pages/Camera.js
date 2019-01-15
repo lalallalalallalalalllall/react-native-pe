@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native'
+import { Text, View, Image, ActivityIndicator, TouchableWithoutFeedback, TouchableOpacity, StyleSheet } from 'react-native'
 
 import { RNCamera } from 'react-native-camera'
-
+const RecordButton = require('../Resources/img/RecordButton.png')
 export class Camera extends Component {
     state = {
         recording: '',
@@ -17,7 +17,7 @@ export class Camera extends Component {
                 onPress={this.startRecording.bind(this)}
                 style={styles.capture}
             >
-                <Text style={{ fontSize: 14 }}> RECORD </Text>
+                <Image style={styles.logo} source={RecordButton} ></Image>
             </TouchableOpacity>
         );
 
@@ -27,7 +27,7 @@ export class Camera extends Component {
                     onPress={this.stopRecording.bind(this)}
                     style={styles.capture}
                 >
-                    <Text style={{ fontSize: 14 }}> STOP </Text>
+                    <Image style={styles.logo} source={RecordButton} ></Image>
                 </TouchableOpacity>
             );
         }
@@ -35,7 +35,10 @@ export class Camera extends Component {
         if (processing) {
             button = (
                 <View style={styles.capture}>
-                    <ActivityIndicator animating size={18} />
+                    {/* <TouchableWithoutFeedback onPress={this.registerAccount}> */}
+                    <Image style={styles.logo} source={RecordButton} ></Image>
+                    {/* </TouchableWithoutFeedback> */}
+                    {/* <ActivityIndicator animating size={18} /> */}
                 </View>
             );
         }
@@ -54,9 +57,7 @@ export class Camera extends Component {
                         "We need your permission to use your camera phone"
                     }
                 />
-                <View
-                    style={{ flex: 0, flexDirection: "row", justifyContent: "center" }}
-                >
+                <View style={{ flex: 0, flexDirection: "row", justifyContent: "center" }}>
                     {button}
                 </View>
             </View>
@@ -64,18 +65,16 @@ export class Camera extends Component {
     }
 
     async startRecording() {
-
-
         this.setState({ recording: true });
         // default to mp4 for android as codec is not set
         const { uri, codec = "mp4" } = await this.camera.recordAsync();
         console.log(uri)
         this.props.functions.modifyVideo(uri)
-
     }
 
     stopRecording() {
         this.camera.stopRecording();
+        this.setState({ recording: false });
     }
 
 
@@ -85,22 +84,26 @@ export class Camera extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
+        // flexDirection: 'column',
         backgroundColor: 'black'
     },
     preview: {
         flex: 1,
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: '90%'
     },
     capture: {
         flex: 0,
-        backgroundColor: '#fff',
         borderRadius: 5,
         padding: 15,
         paddingHorizontal: 20,
         alignSelf: 'center',
         margin: 20
+    },
+    logo: {
+        width: 110,
+        height: 100
     }
 });
 

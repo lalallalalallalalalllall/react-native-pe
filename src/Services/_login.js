@@ -25,7 +25,7 @@ module.exports = (phoneNumber, password) => {
           userId: '2',
           color: '#110011',
           username: 'friend 2',
-          url: 'https://s3-ap-southeast-1.amazonaws.com/pegeon-vide-test-cdn/video/sample.mp4',
+          url: 'https://campuen-my.sharepoint.com/:v:/g/personal/u04265_my365_ink/EXAplLNPpGlKsR3ulphG1i4BaTfPbJug086Pf5uLICerMA?download=1',
           createdAt: '2018-10-20',
           colorName : 'oren',
           seen : true

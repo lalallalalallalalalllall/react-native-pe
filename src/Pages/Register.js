@@ -27,14 +27,16 @@ export class Register extends Component {
     console.log(this.props)
     this.props.navigation.navigate({ routeName: 'Verification', params: { registrationKey: '1234' } })
   }
-  registerAccount = () => {
-
+  registerAccount = async () => {
     //do some validation here ?
-    this.props.navigation.navigate({
-      routeName: "Varification", params: {
-        ahahha: 'true'
-      }
-    })
+    //call registration api
+
+    // var result = await registrationApi(this.state.date, this.state.password, this.state.name, this.state.phoneNumber)
+    // if(result.registrationKey){
+    this.props.navigation.navigate('Verification', { registrationKey: '1234', phoneNo: this.state.phoneNumber })
+    //}else{
+    // this.setState({error : result.error })
+    //}
   }
   render() {
     return (

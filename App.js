@@ -34,6 +34,9 @@ import Loading from './src/Pages/Loading'
 import Verification from './src/Pages/Verification'
 import VideoEdit from './src/Pages/VideoEdit'
 import SendToFriends from './src/Pages/SendToFriends'
+import AddFriend from './src/Pages/AddFriend'
+import MainSetting from './src/Pages/MainSetting'
+import DeleteFriend from './src/Pages/DeleteFriend'
 // must be matching somethings inside AppNavigator
 const initial = 'Loading'
 const AppNavigator = createStackNavigator({
@@ -47,12 +50,15 @@ const AppNavigator = createStackNavigator({
   Camera: Camera,
   MainSwiper: MainSwiper,
   Verification: Verification,
-  SendToFriends: SendToFriends
+  SendToFriends: SendToFriends,
+  AddFriend: AddFriend,
+  DeleteFriend:DeleteFriend,
+  MainSetting: MainSetting
 }, {
     initialRouteName: initial,
     navigationOptions: {
       header: null
-    }
+    } 
   }
 )
 
@@ -60,20 +66,18 @@ const prevGetStateForAction = AppNavigator.router.getStateForAction;
 
 AppNavigator.router.getStateForAction = (action, state) => {
   // Do not allow to go back from Home
-  if (action.type === 'BACK' && state && state.routes[state.index].routeName === 'MainSwiper') {
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'MainSwiper') {
     return null;
   }
+  if (action.type === 'Navigation/BACK' && state && state.routes[state.index].routeName === 'SendToFriends') {
+    const newRoutes = state.routes.filter(r => r.routeName == 'MainSwiper');
+    const newIndex = newRoutes.length - 1;
+    return prevGetStateForAction(action, { index: newIndex, routes: newRoutes });
+  }
 
-  // // Do not allow to go back to Login
-  // if (action.type === 'Navigation/BACK' && state) {
-  //   const newRoutes = state.routes.filter(r => r.routeName !== 'Login');
-  //   const newIndex = newRoutes.length - 1;
-  //   return prevGetStateForAction(action, { index: newIndex, routes: newRoutes });
-  // }
   return prevGetStateForAction(action, state);
 };
 
-console.log(prevGetStateForAction)
 //storage key
 const key = USER_INFORMATION_ASYNC_STORAGE_KEY;
 
